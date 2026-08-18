@@ -1,6 +1,7 @@
 type ElementType = '火'|'水'|'木'|'光'|'闇';
 interface MonsterDef { id:string; name:string; icon:string; element:ElementType; tribe:string; rarity:number; role:string; passive:string; passiveName:string; passiveDesc:string; hp:number; atk:number; skill:string; skillDesc:string; ult:string; ultDesc:string; obtain:string; evolve?:string }
-interface QuestDef { id:string; name:string; icon:string; cost:number; rank:number; enemy:string; enemyIcon:string; element:ElementType; tribe:string; hp:number; atk:number; xp:number; gold:number; drops?:[string,number][]; drop?:string; dropRate?:number; advent?:boolean; gimmick?:'barrier'|'heat'|'aura'; gimmickText?:string }
+interface QuestDef { id:string; chapter?:string; stage?:string; name:string; icon:string; cost:number; rank:number; enemy:string; enemyIcon:string; element:ElementType; tribe:string; hp:number; atk:number; xp:number; gold:number; drops?:[string,number][]; drop?:string; dropRate?:number; advent?:boolean; gimmick?:'barrier'|'heat'|'aura'; gimmickText?:string }
+interface ChapterDef { id:string; title:string; subtitle:string; icon:string; questIds:string[] }
 interface OwnedMonster { level:number; luck:number; evolved:boolean }
 interface FighterState { id:string; hp:number; maxHp:number; ult:number; guard:boolean }
 interface BattleState { quest:string; enemyHp:number; enemyMax:number; round:number; turn:number; fighters:FighterState[]; shield:number; debuff:number; barrier:number; heat:number; aura:number; stunned:boolean; log:string[] }
