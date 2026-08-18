@@ -8,5 +8,5 @@
     "noImplicitAny": false,
     "skipLibCheck": true
   },
-  "files": ["src/types.ts", "src/data.ts", "src/app.ts", "src/game.ts", "src/v7.ts", "src/v8.ts", "src/v9.ts"]
+  "files": ["src/types.ts", "src/data.ts", "src/app.ts", "src/game.ts", "src/v7.ts", "src/v8.ts", "src/v9.ts", "src/v10.ts"]
 }
