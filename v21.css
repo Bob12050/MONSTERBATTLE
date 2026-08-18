@@ -1,0 +1,32 @@
+/* v21: keep the sortie preparation screen inside the mobile viewport. */
+.v9-shell{box-sizing:border-box;width:100%;max-width:100vw;overflow:hidden}
+.v9-shell *{box-sizing:border-box;min-width:0}
+.v9-topbar,.v9-mission,.v9-gimmick,.v9-deck,.v9-footer{width:100%;max-width:100%}
+.v9-slots{width:100%;grid-template-columns:repeat(4,minmax(0,1fr));overflow:hidden}
+.v9-slot{width:100%;max-width:100%;overflow:hidden}
+.v9-deck-actions{width:100%;grid-template-columns:repeat(2,minmax(0,1fr))}
+.v9-deck-actions button{width:100%;min-width:0}
+.v9-footer{grid-template-columns:minmax(0,1fr) minmax(118px,34%)}
+.v9-reward{overflow:hidden}
+.v9-sortie-btn{width:100%;min-width:0}
+@media(max-width:480px){
+ .v9-shell{padding-left:max(7px,env(safe-area-inset-left));padding-right:max(7px,env(safe-area-inset-right))}
+ .v9-topbar{grid-template-columns:44px minmax(0,1fr) 68px}
+ .v9-mission{grid-template-columns:54px minmax(0,1fr) 50px}
+ .v9-deck{padding:8px}
+ .v9-deck-head{grid-template-columns:minmax(0,1fr) auto auto;gap:6px}
+ .v9-total,.v9-rank{padding-left:6px}
+ .v9-slots{gap:4px}
+ .v9-slot{padding:5px 2px}
+ .v9-slot strong{font-size:28px}
+ .v9-slot b{font-size:8px}
+ .v9-slot small{font-size:6.5px}
+ .v9-footer{grid-template-columns:minmax(0,1fr) 132px;gap:6px}
+ .v9-sortie-btn{height:56px;font-size:20px}
+}
+@media(max-width:360px){
+ .v9-slot strong{font-size:24px}
+ .v9-slot b{font-size:7px}
+ .v9-footer{grid-template-columns:minmax(0,1fr) 118px}
+ .v9-sortie-btn{font-size:18px}
+}
