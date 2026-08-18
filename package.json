@@ -1,0 +1,12 @@
+{
+  "name": "monsterbattle",
+  "private": true,
+  "version": "5.0.0",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
