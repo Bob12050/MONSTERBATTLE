@@ -1,5 +1,7 @@
 type ElementType = '火'|'水'|'木'|'光'|'闇';
-interface MonsterDef { id:string; name:string; icon:string; element:ElementType; tribe:string; rarity:number; role:string; passive:string; passiveName:string; passiveDesc:string; hp:number; atk:number; skill:string; skillDesc:string; ult:string; ultDesc:string; obtain:string; evolve?:string }
+type AbilityCategory = 'killer'|'gimmick'|'support'|'condition'|'farm'|'unique';
+interface AbilityDef { id:string; name:string; desc:string; category:AbilityCategory; unique?:boolean }
+interface MonsterDef { id:string; name:string; icon:string; element:ElementType; tribe:string; rarity:number; role:string; abilities:string[]; hp:number; atk:number; skill:string; skillDesc:string; ult:string; ultDesc:string; obtain:string; evolve?:string; /** @deprecated v11 compatibility only */ passive?:string; /** @deprecated v11 compatibility only */ passiveName?:string; /** @deprecated v11 compatibility only */ passiveDesc?:string }
 interface QuestDef { id:string; chapter?:string; stage?:string; name:string; icon:string; cost:number; rank:number; enemy:string; enemyIcon:string; element:ElementType; tribe:string; hp:number; atk:number; xp:number; gold:number; drops?:[string,number][]; drop?:string; dropRate?:number; advent?:boolean; gimmick?:'barrier'|'heat'|'aura'; gimmickText?:string }
 interface ChapterDef { id:string; title:string; subtitle:string; icon:string; questIds:string[] }
 interface OwnedMonster { level:number; luck:number; evolved:boolean }
