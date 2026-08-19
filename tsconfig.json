@@ -8,5 +8,5 @@
     "noImplicitAny": false,
     "skipLibCheck": true
   },
-  "files": ["src/types.ts", "src/data.ts", "src/app.ts", "src/game.ts", "src/v7.ts", "src/v8.ts", "src/v9.ts", "src/v10.ts", "src/v11.ts", "src/v12.ts", "src/v13.ts", "src/v14.ts", "src/v15.ts", "src/v16.ts", "src/v17.ts", "src/v18.ts", "src/v19.ts", "src/v20.ts", "src/v22.ts", "src/v23.ts"]
+  "files": ["src/types.ts", "src/data.ts", "src/app.ts", "src/game.ts", "src/v7.ts", "src/v8.ts", "src/v9.ts", "src/v10.ts", "src/v11.ts", "src/v12.ts", "src/v13.ts", "src/v14.ts", "src/v15.ts", "src/v16.ts", "src/v17.ts", "src/v18.ts", "src/v19.ts", "src/v20.ts", "src/v22.ts", "src/v23.ts", "src/v24.ts"]
 }
