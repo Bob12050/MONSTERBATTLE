@@ -1,0 +1,35 @@
+// @ts-nocheck
+// v29: replace ★5 Lucifer's concept-sheet crop with the approved clean character artwork.
+let V29_LUCIFER_URL='';
+const V29_ART=v28Art;
+const V29_IMG=v28Img;
+
+v28Art=function(id){return id==='lucifer'&&V29_LUCIFER_URL?V29_LUCIFER_URL:V29_ART(id)};
+v28Img=function(id,cls='v28-art-img'){
+ const src=v28Art(id),u=M(id);
+ return src?`<img class="${cls}${id==='lucifer'?' v29-lucifer-img':''}" data-v29-monster="${id}" src="${src}" alt="${u.name}" draggable="false">`:u.icon;
+};
+
+async function v29LoadLucifer(){
+ try{
+  const parts=await Promise.all([0,1,2,3,4].map(i=>fetch(`./assets/lucifer/hq/lucifer_base_${i}.b64?v=29`).then(r=>{if(!r.ok)throw new Error(`art ${i}`);return r.text()})));
+  const raw=atob(parts.join('').replace(/\s/g,'')),bytes=new Uint8Array(raw.length);
+  for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
+  V29_LUCIFER_URL=URL.createObjectURL(new Blob([bytes],{type:'image/webp'}));
+  MONSTERS.lucifer.art=V29_LUCIFER_URL;MONSTERS.lucifer.portrait=V29_LUCIFER_URL;
+  document.querySelectorAll('[data-v29-monster="lucifer"]').forEach((el:any)=>el.src=V29_LUCIFER_URL);
+  requestAnimationFrame(()=>{v28DecorateVisibleCards();document.querySelectorAll('[data-v29-monster="lucifer"]').forEach((el:any)=>el.src=V29_LUCIFER_URL)});
+ }catch(e){console.warn('Lucifer HQ art fallback active',e)}
+}
+
+const V29_DETAIL=v24OpenMonsterDetail;
+v24OpenMonsterDetail=function(id){
+ V29_DETAIL(id);
+ if(id!=='lucifer')return;
+ const root=document.getElementById('v24-monster-detail');
+ const hero=root?.querySelector('.v24-hero-icon');
+ if(hero){hero.classList.add('v29-lucifer-hero');}
+};
+
+const V29_HEADER=header;header=function(){return V29_HEADER().replace(/TYPE SCRIPT v\d+/,'TYPE SCRIPT v29')};
+S.version=29;save();render();v29LoadLucifer();
