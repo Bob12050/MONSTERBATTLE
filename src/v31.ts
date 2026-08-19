@@ -1,0 +1,49 @@
+// @ts-nocheck
+// v31: turn Griffon advent into the first real team-building check.
+const V31_GRIFFON_DIFF={
+ '初級':{barrier:260,body:0.55},
+ '上級':{barrier:430,body:0.42},
+ '超級':{barrier:650,body:0.30},
+ '極':{barrier:900,body:0.22}
+};
+const V31_GRIFFON=V7_ADVENT_BASE.a1;
+if(V31_GRIFFON){
+ V31_GRIFFON.gimmick='barrier';
+ V31_GRIFFON.gimmickText='翠嵐障壁：バリア中は本体ダメージを大幅軽減。火属性・バリアブレイカーでBREAKを狙え';
+}
+for(const diff of Object.keys(V7_DIFF)){
+ const q=QUESTS.find(x=>x.id===`a1_${diff}`);if(q){q.gimmick='barrier';q.gimmickText=V31_GRIFFON.gimmickText;q.v31Griffon=true;q.v31Barrier=V31_GRIFFON_DIFF[diff].barrier;q.v31BodyMult=V31_GRIFFON_DIFF[diff].body;}
+}
+
+const V31_START=startQuest;
+startQuest=function(id){
+ V31_START(id);
+ const b=S.battle;if(!b)return;const q=QUESTS.find(x=>x.id===b.quest);
+ if(q?.v31Griffon){b.barrier=q.v31Barrier;b.v31BodyMult=q.v31BodyMult;b.v31Griffon=true;b.log.push(`🌪 翠嵐障壁 ${b.barrier}：BREAKするまで本体への攻撃が通りにくい`);save();render();}
+};
+
+const V31_HIT=hit;
+hit=function(base,label){
+ const b=S.battle,q=Q();if(!b?.v31Griffon||b.barrier<=0)return V31_HIT(base,label);
+ const f=active(),u=M(f.id),defs=v12CombatBoostDefs(f.id,q),p=passiveInfo(f.id,q);defs.forEach(v11LogAbility);
+ const raw=Math.max(1,Math.floor(base*elem(u.element,q.element)*p.mult*(.94+Math.random()*.12)));
+ let barrierMult=u.element==='火'?1.45:1;
+ if(v11Has(u,'barrier_breaker')){barrierMult*=1.65;v11LogAbility(v11Def('barrier_breaker'));}
+ const bd=Math.max(1,Math.floor(raw*barrierMult)),body=Math.max(1,Math.floor(raw*(q.v31BodyMult||.35)));
+ b.barrier-=bd;b.enemyHp-=body;b.log.push(`${label}：障壁${bd} / 本体${body}`);
+ if(b.barrier<=0){b.barrier=0;b.stunned=true;b.log.push('💥 翠嵐障壁 BREAK！ 次の攻め時！');if(v11Has(u,'break_charge')){b.fighters.forEach(x=>x.ult=Math.min(100,x.ult+10));v11LogAbility(v11Def('break_charge'));}}
+};
+
+// Expose the real suitability logic to recommendation/formation screens.
+function v31GriffonFit(id,q){
+ const u=M(id),defs=v11Defs(id);let score=0,reasons=[];
+ if(u.element==='火'){score+=3;reasons.push('火属性');}
+ if(defs.some(a=>a.id==='barrier_breaker')){score+=4;reasons.push('バリアブレイカー');}
+ if(defs.some(a=>a.id==='phantom_killer')){score+=2;reasons.push('幻獣キラー');}
+ if(defs.some(a=>a.id==='break_killer')){score+=1;reasons.push('BREAKキラー');}
+ return{score,reasons};
+}
+const V31_RECOMMEND=typeof v24RecommendScore==='function'?v24RecommendScore:null;
+if(V31_RECOMMEND)v24RecommendScore=function(id,q){const base=V31_RECOMMEND(id,q);if(q?.v31Griffon){const fit=v31GriffonFit(id,q);return typeof base==='number'?base+fit.score*10:base;}return base;};
+
+S.version=31;save();render();
