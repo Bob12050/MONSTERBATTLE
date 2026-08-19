@@ -1,0 +1,16 @@
+/* v25: compact monster detail with tap-to-open sections. */
+.v25-detail-shell{grid-template-rows:auto minmax(170px,34vh) auto minmax(0,1fr) auto}
+.v25-hero{min-height:0}
+.v25-detail-menu{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 10px}
+.v25-detail-menu button{min-width:0;border:1px solid #4e718866;background:#0a1722;color:#c8d9e5;border-radius:9px;padding:8px 4px;font-size:10px;font-weight:900;white-space:nowrap}
+.v25-detail-menu button.active{border-color:#5be5ff;background:linear-gradient(#12647d,#0b3349);color:#fff;box-shadow:inset 0 0 14px #6eeeff18}
+.v25-detail-panel{min-height:0;overflow:auto;padding:8px 10px 12px;-webkit-overflow-scrolling:touch}
+.v25-panel{border:1px solid #ffffff18;border-radius:12px;background:#07111bd9;padding:10px}
+.v25-panel>h3{margin:0 0 9px;font-size:13px;color:#77e6ff}
+.v25-inline-status{margin:0;background:transparent;border:0;padding:0}
+.v25-basic{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}
+.v25-basic span{padding:7px 4px;text-align:center;border-radius:8px;background:#ffffff08;font-size:9px;color:#92a8bb}.v25-basic b{display:block;color:#fff;font-size:11px;margin-top:2px}
+.v25-evo-card{display:grid;grid-template-columns:72px 1fr;gap:10px;align-items:center;padding:9px;border-radius:10px;background:#ffffff07}.v25-evo-icon{font-size:48px;text-align:center}.v25-evo-card small{display:block;color:#ffd36d;font-weight:900}.v25-evo-card b{display:block;font-size:14px;margin:2px 0 5px}.v25-evo-card p,.v25-obtain-card p,.v25-help{margin:4px 0;color:#9fb1c1;font-size:9px;line-height:1.5}
+.v25-empty,.v25-obtain-card{padding:12px;border-radius:10px;background:#ffffff07;color:#c5d4df;font-size:10px}.v25-obtain-card b{color:#fff;font-size:13px}
+.v25-quest-list{display:grid;gap:6px}.v25-quest-list button{width:100%;display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:7px;align-items:center;text-align:left;border:1px solid #ffffff16;border-radius:9px;background:#081620;color:#fff;padding:8px}.v25-quest-list button div{min-width:0}.v25-quest-list b{display:block;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v25-quest-list small{display:block;color:#9db1c0;font-size:8px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v25-quest-list em{font-style:normal;color:#8ca5b7;font-size:8px}.v25-grade{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;font-size:12px;font-weight:950;background:#23384a}.v25-grade.grade-S{background:#0b6d7d;color:#92f5ff}.v25-grade.grade-A{background:#315a72;color:#c9f5ff}.v25-grade.grade-B{background:#596035;color:#f4f1a1}
+@media(max-width:420px){.v25-detail-shell{grid-template-rows:auto minmax(145px,30vh) auto minmax(0,1fr) auto}.v25-detail-menu{gap:4px;padding:0 7px}.v25-detail-menu button{font-size:9px;padding:7px 2px}.v25-detail-panel{padding:6px 7px 9px}.v25-basic{gap:4px}.v25-quest-list button{grid-template-columns:28px minmax(0,1fr);}.v25-quest-list em{display:none}}

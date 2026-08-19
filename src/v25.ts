@@ -1,0 +1,62 @@
+// @ts-nocheck
+// v25: keep monster detail clean; show secondary information only after tapping a menu button.
+let V25_DETAIL_ID=null;
+let V25_DETAIL_TAB='status';
+
+function v25QuestLabel(q){
+ if(q.v7aid){const a=V7_ADVENT_BASE?.[q.v7aid];return a?`降臨：${a.name}`:q.name.replace(/【.*?】/,'')}
+ if(q.v7daily)return `素材：${q.element}晶の試練`;
+ return q.name;
+}
+function v25SuitableQuests(id){
+ const seen=new Set(),rows=[];
+ for(const q of QUESTS){
+  const key=q.v7aid?`advent:${q.v7aid}`:q.id;
+  if(seen.has(key))continue;seen.add(key);
+  const f=v8Suitability(id,q);rows.push({q,f});
+ }
+ return rows.sort((a,b)=>b.f.score-a.f.score||a.q.rank-b.q.rank).slice(0,5);
+}
+function v25EvolutionPanel(id){
+ const u=M(id),o=S.owned[id],e=V7_EVOS?.[id];
+ if(!e)return `<div class="v25-empty">このモンスターには現在、進化先が設定されていません。</div>`;
+ if(o?.evolved)return `<div class="v25-evo-card"><div class="v25-evo-icon">${u.icon}</div><div><small>EVOLVED</small><b>${u.name}</b><p>進化済みです。</p></div></div>`;
+ return `<div class="v25-evo-card"><div class="v25-evo-icon">${e.icon}</div><div><small>EVOLUTION</small><b>${e.name}</b><p>必要：Lv.${e.lv} / ${V7_EICON?.[e.mat]||''}${e.mat}素材 ×${e.cost} / 🪙${e.gold}</p><p>HP ×${e.hp}　ATK ×${e.atk}</p></div></div>`;
+}
+function v25DetailPanel(id,tab){
+ const u=M(id),o=S.owned[id];if(!u||!o)return '';
+ const hp=v24Stat(id,'hp'),atk=v24Stat(id,'atk');
+ if(tab==='status')return `<div class="v25-panel"><h3>ステータス</h3><div class="v24-status v25-inline-status"><div class="v24-level"><b>LV ${o.level}</b><span>🍀 ${o.luck}/99 ${o.luck>=99?'・極':''}</span></div><div class="v24-bar hp"><label>HP</label><b>${hp.toLocaleString()}</b><i style="width:${Math.min(100,45+o.level*2)}%"></i></div><div class="v24-bar atk"><label>ATK</label><b>${atk.toLocaleString()}</b><i style="width:${Math.min(100,42+o.level*2)}%"></i></div><div class="v25-basic"><span>属性 <b>${u.element}</b></span><span>種族 <b>${u.tribe}</b></span><span>ロール <b>${u.role}</b></span></div></div></div>`;
+ if(tab==='ability')return `<div class="v25-panel"><h3>アビリティ</h3>${v24AbilityRows(u)}</div>`;
+ if(tab==='skill')return `<div class="v25-panel"><h3>スキル・奥義</h3><div class="v24-block skill"><h3>✨ スキル</h3><b>${u.skill||'—'}</b><p>${u.skillDesc||''}</p></div><div class="v24-block ult"><h3>🌠 奥義</h3><b>${u.ult||'—'}</b><p>${u.ultDesc||''}</p></div></div>`;
+ if(tab==='evolution')return `<div class="v25-panel"><h3>進化</h3>${v25EvolutionPanel(id)}</div>`;
+ if(tab==='obtain')return `<div class="v25-panel"><h3>入手先</h3><div class="v25-obtain-card"><b>${u.obtain||obtainText(id)}</b><p>このモンスターの主な入手方法です。</p></div></div>`;
+ if(tab==='quests'){
+  const rows=v25SuitableQuests(id);return `<div class="v25-panel"><h3>適正クエスト</h3><p class="v25-help">現在の属性・種族・アビリティから適正度が高い順です。</p><div class="v25-quest-list">${rows.map(({q,f})=>`<button onclick="v25GoQuest('${q.id}')"><span class="v25-grade grade-${f.grade}">${f.grade}</span><div><b>${v25QuestLabel(q)}</b><small>${f.reasons.slice(0,3).join('・')||'汎用枠'}</small></div><em>${q.element} / ${q.tribe}</em></button>`).join('')}</div></div>`;
+ return '';
+}
+function v25SelectDetailTab(tab){
+ V25_DETAIL_TAB=tab;
+ document.querySelectorAll('.v25-detail-menu button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+ const panel=document.getElementById('v25-detail-panel');if(panel&&V25_DETAIL_ID)panel.innerHTML=v25DetailPanel(V25_DETAIL_ID,tab);
+}
+function v25GoQuest(qid){
+ v24CloseMonsterDetail();const q=QUESTS.find(x=>x.id===qid);if(!q)return;S.page='quests';save();render();setTimeout(()=>v9OpenSortie(qid),0);
+}
+
+v24OpenMonsterDetail=function(id){
+ const u=M(id),o=S.owned[id];if(!u||!o)return;
+ V25_DETAIL_ID=id;V25_DETAIL_TAB='status';document.getElementById('v24-monster-detail')?.remove();
+ const root=document.createElement('div');root.id='v24-monster-detail';
+ root.innerHTML=`<div class="v24-detail-shell v25-detail-shell">
+  <header class="v24-detail-head"><button onclick="v24CloseMonsterDetail()">‹</button><div><small>MONSTER DETAIL</small><h1>${u.name}</h1><div>${stars(u.rarity)}</div></div><span class="v24-lock">${S.party.includes(id)?'編成中':''}</span></header>
+  <section class="v24-hero v25-hero"><div class="v24-aura"></div><div class="v24-hero-icon">${u.icon}</div><div class="v24-hero-tags"><span>${v14ElementMark?.(u.element)||u.element} ${u.element}</span><span>${u.tribe}</span><span>${u.role}</span><span>Lv.${o.level}</span><span>🍀${o.luck}</span></div></section>
+  <nav class="v25-detail-menu"><button class="active" data-tab="status" onclick="v25SelectDetailTab('status')">ステータス</button><button data-tab="ability" onclick="v25SelectDetailTab('ability')">アビリティ</button><button data-tab="skill" onclick="v25SelectDetailTab('skill')">スキル/奥義</button><button data-tab="evolution" onclick="v25SelectDetailTab('evolution')">進化</button><button data-tab="obtain" onclick="v25SelectDetailTab('obtain')">入手先</button><button data-tab="quests" onclick="v25SelectDetailTab('quests')">適正クエスト</button></nav>
+  <section id="v25-detail-panel" class="v25-detail-panel">${v25DetailPanel(id,'status')}</section>
+  <footer><button onclick="v24CloseMonsterDetail()">閉じる</button></footer>
+ </div>`;
+ document.body.appendChild(root);document.body.classList.add('v24-detail-open');
+};
+
+const V25_HEADER=header;header=function(){return V25_HEADER().replace('TYPE SCRIPT v24','TYPE SCRIPT v25').replace('TYPE SCRIPT v23','TYPE SCRIPT v25')};
+S.version=25;save();render();
